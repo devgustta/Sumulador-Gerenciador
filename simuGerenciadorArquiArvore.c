@@ -5,8 +5,8 @@
 typedef struct direc{
     char name[50];
     int isFile; // 1 diretorio 2 arquivo
-    struct direc *firstChild; // NÛ para o primeiro filho
-    struct direc *firstBro; // NÛ para o primeiro irm„o (Primeiro irm„o apenas no diretorio pai, depois ser· o ponteiro para os proximos Bro)
+    struct direc *firstChild; // N√≥ para o primeiro filho
+    struct direc *firstBro; // N√≥ para o primeiro irm√£o (Primeiro irm√£o apenas no diretorio pai, depois ser√° o ponteiro para os proximos Bro)
 }Direc;
 
 typedef struct root{
@@ -24,7 +24,7 @@ char infos(){
     return nome;
 }
 
-Direc* navegar(Direc **dir){
+Direc* navegar(Direc **dir, Direc **atual){
     char name[50];
 
     printf("Informe o nome da pasta que deseja navegar: ");
@@ -34,7 +34,7 @@ Direc* navegar(Direc **dir){
         printf("Nenhum Arquivo neste diretorio!!");
     }
 
-    Direc *aux = *dir;
+    Direc *aux = *dir; // agora os dois apontam para o mesmo n√≥
 
     while(aux->firstChild != NULL){
         if(aux->name != name){
@@ -42,8 +42,8 @@ Direc* navegar(Direc **dir){
         }
         //aux = aux->firstChild;
     }
-    // retornar o ponteiro da pasta atual
 
+    *atual = *aux;
 }
 
 Direc* criando(Root **arch, int op){
@@ -59,14 +59,14 @@ Direc* criando(Root **arch, int op){
         while(aux->firstBro != NULL){
             aux = aux->firstBro;
         }
-        aux->firstBro = novo; // alterando o nÛ que tanto aux quanto fila aponta
+        aux->firstBro = novo; // alterando o n√≥ que tanto aux quanto fila aponta
     }
 }
 
 // Inicializar a struct root
 
 int main(){
-    Direc dir = {"User", 1, NULL, NULL};
+    Direc dir = {"User", 1, NULL, NULL}, *atual;
     Root root1 = {"C:", 1, &dir};
     int op;
     // Criar uma variavel que armazena o caminho atual(armazena o ponteiro da pasta atual)
@@ -86,7 +86,7 @@ int main(){
 
         case 3:{
             int op;
-            navegar(&dir);
+            navegar(&dir, &atual); // variavel "atual" vai guardar o ponteiro da pasta em que estamos
             printf("\n\t 1 - sub-pasta");
             scanf("%d", &op);
         }
@@ -97,3 +97,4 @@ int main(){
 
 
 }
+
